@@ -6,7 +6,7 @@ import { authRoutes } from "./Routes/auth.Route.js"
 import { messageRouter } from "./Routes/message.routes.js"
 import cookieParser from "cookie-parser"
 import { userRouter } from "./Routes/users.routes.js"
-const app = express()
+import {app, server } from "./socket/socket.js"
 app.use(express.json())
 app.use(cors())
 dotenv.config()
@@ -18,7 +18,7 @@ app.use("/api/users",userRouter)
 
 const usePort = process.env.PORT || 4801
 
-app.listen(usePort,()=>{
+server.listen(usePort,()=>{
     connectionDB()
     console.log(`server started.....${usePort}`)
 })

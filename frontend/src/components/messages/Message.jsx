@@ -1,19 +1,37 @@
 import React from 'react'
 
-const Message = () => {
+import useConversation from '../../Zustand/useConversation';
+import { useAuthContext } from '../../context/authContext';
+import { extractTime } from '../../utils/extractTime';
+
+
+const Message = ({messages,message,messageSender,messageTime}) => {
+const {authUser}=useAuthContext()
+  const {selectedConversation}=useConversation()
+  console.log("login userId :",authUser._id)
+  const fromMe = authUser._id === messageSender
+  const chatClassName=fromMe?"chat-end":"chat-start"
+  const profilePic = fromMe?authUser.profilePic:selectedConversation.profilePic
+  const chatColorChange=fromMe?"bg-blue-600":"bg-gray-500"
+
+// console.log('messageshake:',message.shouldShake)
+  // var shakeClass=messageshake?"shake":""
+  const shakeClass = message.shouldShake?"shake":""
+
+  
   return (
     
-      <div className="chat chat-end">
+      <div className={`chat  ${chatClassName} `}>
   <div className="chat-image avatar">
     <div className="w-10 rounded-full">
       <img
         alt="Tailwind CSS chat bubble component"
-        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        src={profilePic} />
     </div>
   </div>
   
-  <div className={`chat-bubble text-white bg-blue-400`}>I hate you!</div>
-  <time className="text-xs text-white">12:46</time>
+  <div className={`chat-bubble text-white ${chatColorChange} ${shakeClass} `}>{messages}</div>
+  <time className="text-xs text-white">{extractTime(messageTime)}</time>
     </div>
   )
 }
